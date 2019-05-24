@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>多人聊天室</title>
+    <style>
+		ul{list-style: none;padding:0;margin:0;}
+		.msg-list{position:relative;width:600px;margin:0 auto;}
+		.msg-list ul{padding:10px;min-height:200px;max-height:400px;overflow-y:auto;border:1px solid #ddd;}
+		.msg-list li{float:left;clear:both;margin:10px 0;padding:5px;line-height:2;border-radius:5px;background-color:#efefef;}
+		.msg-list li.active{float:right;background-color:#58bc58;color:#fff;}
+		.msg-list textarea{display:block;min-height:50px;margin:10px 0;width:100%;box-sizing: border-box;}
+		.status{display:none;position: absolute;left:50px;bottom:0;right:0;padding:5px 10px;text-align:center;color:#999;}
+		.login{text-align:right;}
+	</style>
+</head>
+<body>
+    <h1>多人聊天室</h1>
+	<div class="msg-list">
+		<div class="login"><input type="text" name="username" id="username"><button class="btn-login">进入</button><button class="btn-logout">退出</a></div>
+		<ul>
+		</ul>
+		<textarea></textarea>
+		<button class="btn-send">提交</button>
+		<div class="status"></div>
+    </div>
+    <script>
+        (()=>{
+            /**
+             * 客户端Socket
+                * 创建一个客户端实例 new WebSocket(wsserver)
+                * 前后端约定状态码status
+                    0:退出登录
+					1:登录成功
+					2:发送成功 
+             */
+            let autoAnswer = document.querySelector('.msg-list');
+			let login = autoAnswer.querySelector('.login');
+			let username = login.children[0];
+			let btnLogin = login.children[1];
+			let btnLogout = login.children[2];
+
+			let msglist = autoAnswer.querySelector('ul');
+			let msg = autoAnswer.querySelector('textarea');
+			let btnSend = autoAnswer.querySelector('.btn-send');
+            let status = autoAnswer.querySelector('.status');
+
+            let datalist = [],socket=null;
+            
+            btnLogin.onclick = ()=>{
+                //连接 socket 服务器
+                socket = new WebSocket('ws://localhost:1902');
+
+                // 连接成功
+                socket.onopen = (e)=>{
+                    status.style.display = 'block';
+                    status.innerText = '服务已连接 ' + e.target.url;//e.target.url：连接ws服务器的地址（实例化时连接的地址）
+                    username.disabled = true;
+                    socket.send(JSON.stringify({status:1,data:username.value}));//发送状态码和用户名
+                }
+
+                // 退出
+                socket.onclose = (e)=>{
+                    status.innerText = '已断开服务 ' + e.target.url;
+					username.disabled = false;
+                    socket.send(JSON.stringify({status:0,data:username.value}));
+                }
+                
+                // 接收消息
+                socket.onmessage = e=>{
+                    let data = JSON.parse(e.data);
+                    if(data.status === 0){
+                        // 成员退出
+                        status.innerHTML = data.data + '退出入聊天室...';
+                    }else if(data.status === 1){
+                        // 成员进入
+                        status.innerHTML = data.data + '进入聊天室...';
+                    }else if(data.status === 2){
+                        // 渲染消息
+                        datalist.push(data.data);
+                        render();
+                    }
+                }		
+            }
+            
+
+            // 退出
+            btnLogout.onclick = ()=>{
+                socket.close();
+                socket = null;
+            }
+
+            // 发送消息
+            btnSend.onclick = ()=>{
+                // 获取消息
+				let _msg = msg.value;
+
+                let now = new Date();
+
+                socket.send(JSON.stringify({
+                        status:2,
+                        data:{
+                            username:username.value,//用户名
+                            content:_msg,//用户发送的消息
+                            time:now.toLocaleDateString() + ' ' + now.toLocaleTimeString().slice(2)//发送的时间
+                        }
+                    }
+                ));
+
+                // 自动获得焦点
+                msg.value = '';
+                msg.focus();
+            }
+
+
+            function render(){
+                msglist.innerHTML = datalist.map(item=>{
+					return `<li ${item.username===username.value ? 'class="active"':''}>
+						<strong>${item.username}</strong><div>${item.content}</div> <time>${item.time}</time>
+					</li>`
+				}).join('\n');
+            }
+        })()
+    </script>
+</body>
+</html>

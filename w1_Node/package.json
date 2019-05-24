@@ -7,9 +7,13 @@
     "doc": "doc"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.0",
+    "http-proxy-middleware": "^0.19.1",
     "jquery": "^3.4.1",
     "multer": "^1.4.1",
+    "request": "^2.88.0",
+    "ws": "^7.0.0",
     "zlib": "^1.0.5"
   },
   "devDependencies": {

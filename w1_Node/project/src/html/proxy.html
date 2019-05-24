@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>跨域请求之服务器代理</title>
+</head>
+<body>
+    <h1>跨域请求之服务器代理</h1>
+    <script>
+        // let data = new FormData();
+        // data.set('ids','3360,35194,33946,85701,15584,79985,16978,84645,33699,42069,24224,88024,83311,38738,22289,17575,43294,84686,50014,86212,12701,62363,84121,85465,64111,81668,23343,80962,1508,1543,48811,87788,84603,84126,82107,12428,78255,84634,28811,19288,63289,30826,39629,86539,87426,81954,85276,84560,1805,84487')
+        let xhr = new XMLHttpRequest();
+        xhr.onload = ()=>{
+            console.log(xhr.responseText);
+        }
+        xhr.open('post','/jiuxian/act/selectPricebypids.htm',true);
+        xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send('ids=3360,35194,33946,85701,15584,79985,16978,84645,33699,42069,24224,88024,83311,38738,22289,17575,43294,84686,50014,86212,12701,62363,84121,85465,64111,81668,23343,80962,1508,1543,48811,87788,84603,84126,82107,12428,78255,84634,28811,19288,63289,30826,39629,86539,87426,81954,85276,84560,1805,84487')
+    </script>
+</body>
+</html>

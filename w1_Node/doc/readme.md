@@ -205,3 +205,108 @@
     * svg
     * web storage
     * formData
+
+
+## day6-4
+
+### 复习
+* express
+    * 内置中间件
+        * express.static('./',{maxAge})
+        * express.json()                        body-parser
+        * express.urlencoded({})
+    * 第三方中间件
+        * multer
+
+    * 模块化路由（RESTful）
+        * express.Router()
+        * 商品
+            * 增        post
+            * 删        delete
+            * 改        put
+            * 查        get
+            * 预请求    options
+        * 商品分类
+            * 手机
+            * 电脑
+            * 配件
+
+            * 增        post
+            * 删        delete
+            * 改        put
+            * 查        get
+            * 预请求    options
+
+
+### 知识点
+* 爬虫
+    * 分析html结构（重点）
+    * 正则表达式
+
+* 页面渲染
+    * 前后端分离（客户端渲染：BSR）
+    * 前后端不分离（服务端渲染：SSR）
+        * 防扒：防止数据太过于容易被别人窃取
+        * SEO：搜索引擎优化
+            * 搜索引擎就是一个大大的爬虫
+
+
+* 跨域解决方案
+    * jsonp 
+        * 前端：script -> 传递回掉函数名 -> ?callback=getData
+        * 后端：返回js代码-> 回掉函数执行的js代码 -> getData(xxxx)
+    * CORS
+        * 真正ajax请求跨域
+        * 后端：允许跨域
+            * Access-Controll-Allow-Origin:'*'
+                * 一个域名
+                * 通配符
+            * Access-Controll-Allow-Methods:'get,post'
+                * 多个请求类型
+            * Access-Controll-Allow-Headers:
+                * 发送请求头
+                * token: 具有有效期的加密字符串
+    * 服务器代理
+        * 后端无跨域限制
+        * 
+
+
+    * hard code
+
+    * 服务器主动推送
+        * websocket
+            * 前端
+            * 后端
+        * ajax轮询
+            setInterval(()=>{
+
+            },5000)
+
+
+## day6-5
+
+### 复习
+* 跨域解决方案
+    * jsonp
+        * 原理
+        * 前端：用script标签请求api并发送回掉函数名
+        * 后端：接收回掉函数名并响应函数执行的代码
+    * CORS 跨域资源共享
+        * 服务允许跨域
+            * 响应头
+        * 真正的ajax请求
+    * 代理proxy
+        * 有接口但无权限访问
+        * 利用后端无跨域限制来实现效果
+    * 无接口无权限 
+        * 爬虫
+        * BSR & SSR(SEO,响应速度)
+
+* websocket （HTML5新特性）
+    * 服务端
+    * 客户端
+
+* http：短连接
+    * http/https
+* websocket：长连接
+    * ws
